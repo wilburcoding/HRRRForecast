@@ -1,7 +1,9 @@
 print("\033[32m\033[1mHRRRForecast\033[0m")
 print("\033[90mLoading dependencies...\033[0m")
-from herbie import Herbie
 from toolbox import EasyMap, pc
+import pytz
+from herbie import Herbie
+from datetime import datetime
 from paint.radar2 import cm_reflectivity
 import os
 import time
@@ -41,7 +43,7 @@ while hour < end:
   try:
     H = Herbie(run, model=model, fxx=hour)
     href = H.xarray(":REFC:")
-    ax = EasyMap("50m", crs=href.herbie.crs, figsize=[10, 8]).STATES().ax
+    ax = EasyMap("50m", crs=href.herbie.crs,dark=True, figsize=[10, 8]).STATES().ax
     vmin = 0.1
     norm = mpl.colors.Normalize(vmin=vmin, vmax=80)
     kw = cm_reflectivity().cmap_kwargs
@@ -63,14 +65,17 @@ while hour < end:
         **cm_reflectivity().cbar_kwargs
     )
 
+    ti = str(href.valid_time.dt.strftime("%Y-%m-%dT%H:%M:%S").item())
+    valid = datetime.strptime(ti, "%Y-%m-%dT%H:%M:%S")
+    valid = pytz.utc.localize(valid)
     ax.set_title(
-        f"{href.model.upper()}: Reflectivity\nValid: {href.valid_time.dt.strftime('%H:%M UTC %d %b %Y').item()}",
+        f"{href.model.upper()}: {href.refc.GRIB_name}\nValid: {valid.astimezone(est).strftime('%I:%M %p EST - %d %b %Y')}",
         loc="left",
     )
-
-
-    ax.set_title(href.refc.GRIB_name, loc="right")
+    ax.set_title(
+        f"Hour: {str(hour)}\nInit: " + href.time.dt.strftime('%Hz - %d %b %Y').item(), loc="right")
     ax.set_extent([-74.5, -71.5, 40, 42])
+    plt.tight_layout()
     plt.savefig("output/" + str(hour) + ".png")
     plt.clf()
     count+=1
