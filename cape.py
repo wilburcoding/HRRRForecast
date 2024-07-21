@@ -5,6 +5,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 from matplotlib import colormaps
+from datetime import datetime
+import pytz
+est = pytz.timezone('US/Eastern')
 
 # Herbie object for the HRRR model 6-hr surface forecast product
 # H = Herbie('2024-06-25 12:00',
@@ -17,8 +20,8 @@ from matplotlib import colormaps
 
 # Read subset with xarray, like 2-m temperature.
 
-hour = 30
-H = Herbie("2024-06-25 18:00", fxx=hour)
+hour = 31
+H = Herbie("2024-06-29 18:00", fxx=hour)
 href = H.xarray(":CAPE:surface")
 print(href)
 ax = EasyMap("50m", crs=href.herbie.crs, figsize=[10, 8]).STATES().ax
@@ -71,12 +74,14 @@ plt.colorbar(
     shrink=0.8
 )
 
+ti = str(href.valid_time.dt.strftime("%Y-%m-%dT%H:%M:%S").item())
+valid = datetime.strptime(ti, "%Y-%m-%dT%H:%M:%S")
+valid = pytz.utc.localize(valid)
 ax.set_title(
-    f"{href.model.upper()}: SBCAPE\nValid: {href.valid_time.dt.strftime('%H:%M UTC %d %b %Y').item()}",
+    f"{href.model.upper()}: {href.cape.GRIB_name}\nValid: {valid.astimezone(est).strftime('%I:%M %p EST - %d %b %Y')}",
     loc="left",
 )
-
-
-ax.set_title(href.cape.GRIB_name, loc="right")
+ax.set_title(
+    f"Hour: {str(hour)}\nInit: " + href.time.dt.strftime('%Hz - %d %b %Y').item(), loc="right")
 ax.set_extent([-74.5, -71.5, 40, 42])
 plt.savefig("6-25-2024[12z](cape)" + str(hour) + ".png")

@@ -18,6 +18,7 @@ print("\033[90mOutput HRRR model run for Long Island region [1]\033[0m")
 print("\033[90mOutput NAM model run for Long Island region [2]\033[0m")
 res = input("\033[37m? Input an option: \033[0m")
 model = "hrrr"
+est = pytz.timezone('US/Eastern')
 if (res == "1"):
   model="hrrr"
 elif (res == "2"):

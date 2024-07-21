@@ -15,8 +15,8 @@ import cartopy.crs as ccrs
 
 # Read subset with xarray, like 2-m temperature.
 
-hour = 25
-H = Herbie("2024-06-26 00:00",model="nam", fxx=hour)
+hour = 31
+H = Herbie("2024-06-29 18:00",model="hrrr", fxx=hour)
 href = H.xarray(":GUST:")
 print(href)
 ax = EasyMap("50m", crs=href.herbie.crs, figsize=[10, 8]).STATES().ax
