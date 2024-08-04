@@ -1,5 +1,8 @@
 import os
-# Get the list of all files and directories
+import imageio
 path = "./output"
 dir_list = os.listdir(path)
-print(dir_list)
+images = []
+for filename in dir_list:
+    images.append(imageio.imread("./output/" + filename))
+imageio.mimsave('output.gif', images, duration=0.8)
