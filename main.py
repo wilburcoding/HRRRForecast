@@ -17,7 +17,6 @@ norm = mpl.colors.Normalize(vmin=vmin, vmax=80)
 kw = cm_reflectivity().cmap_kwargs
 kw["norm"] = norm
 kw["cmap"].set_under("white")
-print(href.refc.rolling())
 p = ax.pcolormesh(
     href.longitude,
     href.latitude,
