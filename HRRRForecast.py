@@ -1,3 +1,4 @@
+from fields import gen_fields
 print("\033[32m\033[1mHRRRForecast\033[0m")
 print("\033[90mLoading dependencies...\033[0m")
 from toolbox import EasyMap, pc
@@ -25,10 +26,14 @@ elif (res == "2"):
   model = "nam"
 else:
   sys.exit(1)
+fields = [
 
+]
 for i in range(3):
   sys.stdout.write("\033[F")
   sys.stdout.write("\033[K")
+print(gen_fields())
+
 run = input("Runtime (YYYY-MM-DD HH:00): ")
 start = int(input("Start hour: "))
 end = int(input("End hour: "))
@@ -36,10 +41,13 @@ watch = input("Watch Mode (y/n): ")
 for i in range(3):
   sys.stdout.write("\033[F") 
   sys.stdout.write("\033[K")
+print("Select a field: ")
+
 count = 1
 print("\033[36mDownloading \033[1m[" + str(count) +
       "/" + str(end-start) + "]\033[0m\033[36m...\033[0m")
 hour = start
+
 while hour < end:
   try:
     H = Herbie(run, model=model, fxx=hour)
