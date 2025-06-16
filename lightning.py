@@ -35,7 +35,7 @@ p = ax.pcolormesh(
     href.ltng,
     transform=pc,
     vmin=0.01,
-    vmax=30,
+    vmax=30,    
     cmap=cmap
 )
 plt.colorbar(

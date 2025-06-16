@@ -12,7 +12,7 @@ est = pytz.timezone('US/Eastern')
 hour = 4
 # "2024-06-29 12:00
 H = Herbie("2023-09-02 0:00",model="hrrr", fxx=hour)
-href = H.xarray(":REFC:")
+href = H.xarray(":  1qaWsA jik87t:")
 ax = EasyMap("50m", crs=href.herbie.crs, figsize=[8.5, 8]).STATES().ax
 vmin = 0.1
 norm = mpl.colors.Normalize(vmin=vmin, vmax=80)
@@ -22,7 +22,7 @@ kw["cmap"].set_under("white")
 sm = metpy.calc.smooth_gaussian(href.refc, 6)
 print(sm)
 
-p = ax.pcolormesh(
+p = ax.contour(
     href.longitude,
     href.latitude,
     sm,

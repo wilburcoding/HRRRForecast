@@ -1,4 +1,6 @@
 import matplotlib as mpl
+from matplotlib import colormaps
+from paint.radar2 import cm_reflectivity
 
 
 def gen_fields():
@@ -31,8 +33,40 @@ def gen_fields():
             rgbc2.append([item[0]/255.0, item[1]/255.0, item[2]/255.0])
     cmap = mpl.colors.ListedColormap(rgbc2)
     cmap.set_under("white")
+    
     fields.append({
         "cmap": cmap,
-        "name": "cape",
+        "fname": "cape",
+        "name":"SBCAPE (j/kg)",
+        "xa":":CAPE:surface",
+        "cmp":{}
+    })
+    cmap = colormaps["YlOrBr"]
+
+
+    cmap.set_under("white")
+    fields.append({
+        "cmap": cmap,
+        "fname": "ltng",
+        "name": "Lightning",
+        "xa":":LTNG:",
+        "cmp": {
+            "vmin":0.01,
+            "vmax":30
+        }
+    })
+    vmin = 0.1
+    norm = mpl.colors.Normalize(vmin=vmin, vmax=80)
+    kw = cm_reflectivity().cmap_kwargs
+    kw["norm"] = norm
+    kw["cmap"].set_under("white")
+    fields.append({
+        "cmap": kw["cmap"],
+        "fname": "refc",
+        "name": "Reflectivity",
+        "xa": ":REFC:",
+        "cmp": {
+            "norm":kw["norm"]
+        }
     })
     return fields
